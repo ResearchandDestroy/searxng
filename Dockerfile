@@ -1,6 +1,7 @@
 FROM alpine:3.18
 ENTRYPOINT ["/sbin/tini","--","/usr/local/searxng/dockerfiles/docker-entrypoint.sh"]
-EXPOSE 8080
+EXPOSE 80/tcp
+EXPOSE 443/tcp
 VOLUME /etc/searxng
 
 ARG SEARXNG_GID=977
@@ -43,9 +44,20 @@ RUN apk add --no-cache -t build-dependencies \
     uwsgi \
     uwsgi-python3 \
     brotli \
+    tor \
+    curl \
+    nginx \
  && pip3 install --no-cache -r requirements.txt \
  && apk del build-dependencies \
  && rm -rf /root/.cache
+
+COPY torrc /etc/tor/torrc
+
+COPY searxng-nginx.conf /etc/nginx/http.d/default.conf
+COPY --chmod=0700 generate_self-signed_cert.sh /usr/local/searxng/generate_self-signed_cert.sh
+COPY nginx.conf /etc/nginx/nginx.conf
+
+COPY --chmod=0700 searxng-monitor.sh /usr/local/searxng/searxng-monitor.sh
 
 COPY --chown=searxng:searxng dockerfiles ./dockerfiles
 COPY --chown=searxng:searxng searx ./searx
