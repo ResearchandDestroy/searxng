@@ -7,7 +7,7 @@ general:
   privacypolicy_url: false
   # use true to use your own donation page written in searx/info/en/donate.md
   # use false to disable the donation link
-  donation_url: https://docs.searxng.org/donate.html
+  donation_url: false
   # mailto:contact@example.com
   contact_url: false
   # record stats
@@ -178,7 +178,7 @@ outgoing:
     all://:
       - socks5h://127.0.0.1:9050
 
-  using_tor_proxy: true
+  # using_tor_proxy: true
   #
   # Extra seconds to add in order to account for the time taken by the proxy
   #
