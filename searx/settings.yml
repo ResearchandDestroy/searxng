@@ -2,16 +2,16 @@ general:
   # Debug mode, only for development. Is overwritten by ${SEARXNG_DEBUG}
   debug: false
   # displayed name
-  instance_name: "SearXNG"
+  instance_name: "DorXNG"
   # For example: https://example.com/privacy
   privacypolicy_url: false
   # use true to use your own donation page written in searx/info/en/donate.md
   # use false to disable the donation link
-  donation_url: false
+  donation_url: https://docs.searxng.org/donate.html
   # mailto:contact@example.com
   contact_url: false
   # record stats
-  enable_metrics: true
+  enable_metrics: false
 
 brand:
   new_issue_url: https://github.com/searxng/searxng/issues/new
@@ -42,27 +42,28 @@ search:
   #   - fr
   #   - fr-BE
   # ban time in seconds after engine errors
-  ban_time_on_fail: 5
+  ban_time_on_fail: 0
   # max ban time in seconds after engine errors
-  max_ban_time_on_fail: 120
+  max_ban_time_on_fail: 0
   suspended_times:
     # Engine suspension time after error (in seconds; set to 0 to disable)
     # For error "Access denied" and "HTTP error [402, 403]"
-    SearxEngineAccessDenied: 86400
+    SearxEngineAccessDenied: 0
     # For error "CAPTCHA"
-    SearxEngineCaptcha: 86400
+    SearxEngineCaptcha: 0
     # For error "Too many request" and "HTTP error 429"
-    SearxEngineTooManyRequests: 3600
+    SearxEngineTooManyRequests: 0
     # Cloudflare CAPTCHA
-    cf_SearxEngineCaptcha: 1296000
-    cf_SearxEngineAccessDenied: 86400
+    cf_SearxEngineCaptcha: 0
+    cf_SearxEngineAccessDenied: 0
     # ReCAPTCHA
-    recaptcha_SearxEngineCaptcha: 604800
+    recaptcha_SearxEngineCaptcha: 0
 
   # remove format to deny access, use lower case.
   # formats: [html, csv, json, rss]
   formats:
     - html
+    - json
 
 server:
   # If you change port, bind_address or base_url don't forget to rebuild
@@ -150,17 +151,17 @@ ui:
 #
 outgoing:
   # default timeout in seconds, can be override by engine
-  request_timeout: 3.0
+  request_timeout: 60.0
   # the maximum timeout in seconds
   # max_request_timeout: 10.0
   # suffix of searx_useragent, could contain information like an email address
   # to the administrator
   useragent_suffix: ""
   # The maximum number of concurrent connections that may be established.
-  pool_connections: 100
+  pool_connections: 1000
   # Allow the connection pool to maintain keep-alive connections below this
   # point.
-  pool_maxsize: 20
+  pool_maxsize: 200
   # See https://www.python-httpx.org/http2/
   enable_http2: true
   # uncomment below section if you want to use a custom server certificate
@@ -173,16 +174,15 @@ outgoing:
   # are also supported: see
   #   https://2.python-requests.org/en/latest/user/advanced/#socks
   #
-  #  proxies:
-  #    all://:
-  #      - http://proxy1:8080
-  #      - http://proxy2:8080
-  #
-  #  using_tor_proxy: true
+  proxies:
+    all://:
+      - socks5h://127.0.0.1:9050
+
+  using_tor_proxy: true
   #
   # Extra seconds to add in order to account for the time taken by the proxy
   #
-  #  extra_proxy_timeout: 10.0
+  extra_proxy_timeout: 3600
   #
   # uncomment below section only if you have more than one network interface
   # which can be the source of outgoing search requests
@@ -296,19 +296,6 @@ engines:
     engine: 9gag
     shortcut: 9g
     disabled: true
-
-  - name: annas archive
-    engine: annas_archive
-    disabled: true
-    shortcut: aa
-
-  # - name: annas articles
-  #   engine: annas_archive
-  #   shortcut: aaa
-  #   # https://docs.searxng.org/src/searx.engines.annas_archive.html
-  #   aa_content: 'journal_article' # book_any .. magazine, standards_document
-  #   aa_ext: 'pdf'  # pdf, epub, ..
-  #   aa_sort: 'newest'  # newest, oldest, largest, smallest
 
   - name: apk mirror
     engine: apkmirror
@@ -454,20 +441,6 @@ engines:
     shortcut: cr
     timeout: 30
     disabled: true
-
-  - name: crowdview
-    engine: json_engine
-    shortcut: cv
-    categories: general
-    paging: false
-    search_url: https://crowdview-next-js.onrender.com/api/search-v3?query={query}
-    results_query: results
-    url_query: link
-    title_query: title
-    content_query: snippet
-    disabled: true
-    about:
-      website: https://crowdview.ai/
 
   - name: yep
     engine: json_engine
@@ -626,6 +599,7 @@ engines:
     first_page_num: 1
     shortcut: et
     categories: [dictionaries]
+    disabled: false
     about:
       website: https://www.etymonline.com/
       wikidata_id: Q1188617
@@ -908,11 +882,19 @@ engines:
       require_api_key: false
       results: HTML
 
-  - name: z-library
-    engine: zlibrary
-    shortcut: zlib
-    categories: files
-    timeout: 7.0
+  # Disabling zlibrary due to z-lib.org domain seizure
+  # https://github.com/searxng/searxng/pull/1937
+  #
+  # - name: z-library
+  #   engine: zlibrary
+  #   shortcut: zlib
+  #   categories: files
+  #   timeout: 3.0
+  #   # choose base_url, otherwise engine will do it at initialization time
+  #   # base_url: https://b-ok.cc
+  #   # base_url: https://de1lib.org
+  #   # base_url: https://booksc.eu   # does not have cover preview
+  #   # base_url: https://booksc.org  # does not have cover preview
 
   - name: library of congress
     engine: loc
@@ -1203,6 +1185,7 @@ engines:
     engine: qwant
     shortcut: qw
     categories: [general, web]
+    disabled: true
     additional_tests:
       rosebud: *test_rosebud
 
@@ -1211,6 +1194,7 @@ engines:
     engine: qwant
     shortcut: qwn
     categories: news
+    disabled: false
     network: qwant
 
   - name: qwant images
@@ -1218,6 +1202,7 @@ engines:
     engine: qwant
     shortcut: qwi
     categories: [images, web]
+    disabled: false
     network: qwant
 
   - name: qwant videos
@@ -1225,6 +1210,7 @@ engines:
     engine: qwant
     shortcut: qwv
     categories: [videos, web]
+    disabled: false
     network: qwant
 
   # - name: library
@@ -1364,6 +1350,7 @@ engines:
     engine: solidtorrents
     shortcut: solid
     timeout: 4.0
+    disabled: false
     base_url:
       - https://solidtorrents.net
       - https://solidtorrents.eu
@@ -1388,6 +1375,7 @@ engines:
   #       FROM film
   #      WHERE title LIKE :wildcard OR description LIKE :wildcard
   #      ORDER BY duration DESC
+  #   disabled: false
 
   # Requires Tor
   - name: torch
@@ -1404,18 +1392,15 @@ engines:
     shortcut: tch
 
   # torznab engine lets you query any torznab compatible indexer.  Using this
-  # engine in combination with Jackett opens the possibility to query a lot of
-  # public and private indexers directly from SearXNG. More details at:
-  # https://docs.searxng.org/src/searx.engines.torznab.html
-  #
-  # - name: Torznab EZTV
+  # engine in combination with Jackett (https://github.com/Jackett/Jackett)
+  # opens the possibility to query a lot of public and private indexers directly
+  # from SearXNG.
+  # - name: torznab
   #   engine: torznab
-  #   shortcut: eztv
-  #   base_url: http://localhost:9117/api/v2.0/indexers/eztv/results/torznab
+  #   shortcut: trz
+  #   base_url: http://localhost:9117/api/v2.0/indexers/all/results/torznab
   #   enable_http: true  # if using localhost
   #   api_key: xxxxxxxxxxxxxxx
-  #   show_magnet_links: true
-  #   show_torrent_files: false
   #   # https://github.com/Jackett/Jackett/wiki/Jackett-Categories
   #   torznab_categories:  # optional
   #     - 2000
@@ -1486,6 +1471,27 @@ engines:
     disabled: true
     about:
       website: https://wiby.me/
+
+  - name: marginalia
+    engine: json_engine
+    shortcut: mar
+    categories: general
+    paging: false
+    # index: {"0": "popular", "1": "blogs", "2": "big_sites",
+    # "3": "default", "4": experimental"}
+    search_url: https://api.marginalia.nu/public/search/{query}?index=4&count=20
+    results_query: results
+    url_query: url
+    title_query: title
+    content_query: description
+    timeout: 1.5
+    disabled: true
+    about:
+      website: https://www.marginalia.nu/
+      official_api_documentation: https://api.marginalia.nu/
+      use_official_api: true
+      require_api_key: true
+      results: JSON
 
   - name: alexandria
     engine: json_engine
@@ -1563,6 +1569,7 @@ engines:
     base_url: "https://{language}.wiktionary.org/"
     number_of_results: 5
     search_type: text
+    disabled: false
     about:
       website: https://www.wiktionary.org/
       wikidata_id: Q151
@@ -1612,6 +1619,7 @@ engines:
     engine: translated
     shortcut: tl
     timeout: 5.0
+    disabled: false
     # You can use without an API key, but you are limited to 1000 words/day
     # See: https://mymemory.translated.net/doc/usagelimits.php
     # api_key: ''
@@ -1752,6 +1760,7 @@ engines:
     base_url: https://www.wordnik.com/
     categories: [dictionaries]
     timeout: 5.0
+    disabled: false
 
   - name: woxikon.de synonyme
     engine: xpath
