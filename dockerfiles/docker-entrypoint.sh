@@ -23,7 +23,9 @@ Volume:
 EOF
 }
 
-export DEFAULT_BIND_ADDRESS="0.0.0.0:8080"
+printf 'DorXNG Server Codename: dorx-cannon\n\n'
+
+export DEFAULT_BIND_ADDRESS="127.0.0.1:8080"
 export BIND_ADDRESS="${BIND_ADDRESS:-${DEFAULT_BIND_ADDRESS}}"
 
 # Parse command line
@@ -173,6 +175,40 @@ fi
 
 unset MORTY_KEY
 
+# Start Tor
+printf '\nStarting Tor.. Please Wait..\n'
+tor &>/dev/null
+sleep 20
+printf '\n'
+
+# Check Tor
+printf 'Checking Tor Connectivity..\n'
+curl -x socks5h://localhost:9050 -s https://check.torproject.org/api/ip
+printf '\n\n'
+
+# Display IP Configuration
+printf 'IP Configuration:\n'
+ip a s eth0 | grep inet | awk '{print $2}'
+printf '\n'
+
+# Generate Self-Signed Certificate
+printf 'Generating Self-Signed Certificate..\n\n'
+exec /usr/local/searxng/generate_self-signed_cert.sh &
+sleep 10
+
+# Start nginx
+printf 'Starting Nginx:\n'
+nginx &>/dev/null
+netstat -tnl | grep -E '80|443' | awk '{print $4}'
+
+# Print Server Target
+printf "\nSend Search Queries to:\nhttps://%s/search\n" `ip a s eth0 | grep inet | awk '{print $2}' | cut -d'/' -f1`
+
+# SearXNG Monitor
+printf '\nStarting SearXNG Monitor..\n'
+exec /usr/local/searxng/searxng-monitor.sh &
+
 # Start uwsgi
-printf 'Listen on %s\n' "${BIND_ADDRESS}"
-exec su-exec searxng:searxng uwsgi --master --http-socket "${BIND_ADDRESS}" "${UWSGI_SETTINGS_PATH}"
+printf '\nStarting SearXNG..\n'
+printf 'Listening on %s\n' "${BIND_ADDRESS}"
+exec su-exec searxng:searxng uwsgi --master --http-socket "${BIND_ADDRESS}" "${UWSGI_SETTINGS_PATH}" &>/dev/null
