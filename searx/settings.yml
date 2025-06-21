@@ -2,7 +2,7 @@ general:
   # Debug mode, only for development. Is overwritten by ${SEARXNG_DEBUG}
   debug: false
   # displayed name
-  instance_name: "SearXNG"
+  instance_name: "DorXNG v2"
   # For example: https://example.com/privacy
   privacypolicy_url: false
   # use true to use your own donation page written in searx/info/en/donate.md
@@ -11,7 +11,7 @@ general:
   # mailto:contact@example.com
   contact_url: false
   # record stats
-  enable_metrics: true
+  enable_metrics: false
   # expose stats in open metrics format at /metrics
   # leave empty to disable (no password set)
   # open_metrics: <password>
@@ -56,27 +56,28 @@ search:
   #   - fr
   #   - fr-BE
   # ban time in seconds after engine errors
-  ban_time_on_fail: 5
+  ban_time_on_fail: 0
   # max ban time in seconds after engine errors
-  max_ban_time_on_fail: 120
+  max_ban_time_on_fail: 0
   suspended_times:
     # Engine suspension time after error (in seconds; set to 0 to disable)
     # For error "Access denied" and "HTTP error [402, 403]"
-    SearxEngineAccessDenied: 86400
+    SearxEngineAccessDenied: 0
     # For error "CAPTCHA"
-    SearxEngineCaptcha: 86400
+    SearxEngineCaptcha: 0
     # For error "Too many request" and "HTTP error 429"
-    SearxEngineTooManyRequests: 3600
+    SearxEngineTooManyRequests: 0
     # Cloudflare CAPTCHA
-    cf_SearxEngineCaptcha: 1296000
-    cf_SearxEngineAccessDenied: 86400
+    cf_SearxEngineCaptcha: 0
+    cf_SearxEngineAccessDenied: 0
     # ReCAPTCHA
-    recaptcha_SearxEngineCaptcha: 604800
+    recaptcha_SearxEngineCaptcha: 0
 
   # remove format to deny access, use lower case.
   # formats: [html, csv, json, rss]
   formats:
     - html
+    - json
 
 server:
   # Is overwritten by ${SEARXNG_PORT} and ${SEARXNG_BIND_ADDRESS}
@@ -173,17 +174,17 @@ ui:
 #
 outgoing:
   # default timeout in seconds, can be override by engine
-  request_timeout: 3.0
+  request_timeout: 60.0
   # the maximum timeout in seconds
   # max_request_timeout: 10.0
   # suffix of searx_useragent, could contain information like an email address
   # to the administrator
   useragent_suffix: ""
   # The maximum number of concurrent connections that may be established.
-  pool_connections: 100
+  pool_connections: 1000
   # Allow the connection pool to maintain keep-alive connections below this
   # point.
-  pool_maxsize: 20
+  pool_maxsize: 200
   # See https://www.python-httpx.org/http2/
   enable_http2: true
   # uncomment below section if you want to use a custom server certificate
@@ -215,6 +216,12 @@ outgoing:
   #    - 1.1.1.2
   #    - fe80::/126
 
+  proxies:
+    all://:
+      - socks5h://127.0.0.1:9050
+
+  # using_tor_proxy: true
+
 # Plugin configuration, for more details see
 #   https://docs.searxng.org/admin/settings/settings_plugins.html
 #
@@ -242,7 +249,7 @@ plugins:
     active: false
 
   searx.plugins.tor_check.SXNGPlugin:
-    active: false
+    active: true
 
   searx.plugins.tracker_url_remover.SXNGPlugin:
     active: false
@@ -1406,7 +1413,7 @@ engines:
   # https://docs.searxng.org/dev/engines/online/mullvad_leta.html
   - name: mullvadleta
     engine: mullvad_leta
-    disabled: true
+    disabled: false
     leta_engine: google
     categories: [general, web]
     shortcut: ml
@@ -1414,7 +1421,7 @@ engines:
   - name: mullvadleta brave
     engine: mullvad_leta
     network: mullvadleta
-    disabled: true
+    disabled: false
     leta_engine: brave
     categories: [general, web]
     shortcut: mlb
@@ -1628,7 +1635,7 @@ engines:
     categories: [general, web]
     shortcut: ps
     timeout: 4.0
-    disabled: true
+    disabled: false
 
   - name: presearch images
     engine: presearch
@@ -2093,7 +2100,7 @@ engines:
   - name: yahoo
     engine: yahoo
     shortcut: yh
-    disabled: true
+    disabled: false
 
   - name: yahoo news
     engine: yahoo_news
@@ -2322,7 +2329,7 @@ engines:
   - name: seznam
     shortcut: szn
     engine: seznam
-    disabled: true
+    disabled: false
 
   # - name: deepl
   #   engine: deepl
@@ -2337,7 +2344,7 @@ engines:
     shortcut: mjk
     engine: mojeek
     categories: [general, web]
-    disabled: true
+    disabled: false
 
   - name: mojeek images
     shortcut: mjkimg
@@ -2364,7 +2371,7 @@ engines:
     categories: [general, web]
     engine: naver
     shortcut: nvr
-    disabled: true
+    disabled: false
 
   - name: naver images
     naver_category: images
@@ -2520,7 +2527,7 @@ engines:
   - name: stract
     engine: stract
     shortcut: str
-    disabled: true
+    disabled: false
 
   - name: svgrepo
     engine: svgrepo
