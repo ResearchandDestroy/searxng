@@ -13,6 +13,9 @@ contents:
     # uwsgi
     - libxml2
     - mailcap
+    - curl
+    - nginx
+    - tor
 
 entrypoint:
   command: /bin/sh -l

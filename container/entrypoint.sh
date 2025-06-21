@@ -124,24 +124,24 @@ config_handler() {
         if [ "$template" -nt "$target" ]; then
             cp -pfT "$template" "$new_template_target"
 
-            cat <<EOF
-...
-... INFORMATION
-... Update available for "$target"
-... It is recommended to update the configuration file to ensure proper functionality
-...
-... New version placed at "$new_template_target"
-... Please review and merge changes
-...
-EOF
+            cat /dev/null
+#...
+#... INFORMATION
+#... Update available for "$target"
+#... It is recommended to update the configuration file to ensure proper functionality
+#...
+#... New version placed at "$new_template_target"
+#... Please review and merge changes
+#...
+#EOF
         fi
     else
-        cat <<EOF
-...
-... INFORMATION
-... "$target" does not exist, creating from template...
-...
-EOF
+        cat /dev/null
+#...
+#... INFORMATION
+#... "$target" does not exist, creating from template...
+#...
+#EOF
         cp -pfT "$template" "$target"
     fi
 
@@ -149,7 +149,7 @@ EOF
     check_file "$target"
 }
 
-echo "SearXNG $SEARXNG_VERSION"
+echo "DorXNG Server Codename: dorx-cannon v2"
 
 # Check for volume mounts
 volume_handler "$CONFIG_PATH"
@@ -163,4 +163,40 @@ config_handler "$SEARXNG_SETTINGS_PATH" "/usr/local/searxng/searx/settings.yml"
 setup_uwsgi
 setup_searxng
 
-exec /usr/local/searxng/venv/bin/uwsgi --http-socket "$BIND_ADDRESS" "$UWSGI_SETTINGS_PATH"
+# Start Tor
+printf '\nStarting Tor... Please Wait...\n'
+tor &>/dev/null
+sleep 20
+printf '\n'
+
+# Check Tor
+printf 'Checking Tor Connectivity...\n'
+curl -x socks5h://localhost:9050 -s https://check.torproject.org/api/ip
+printf '\n\n'
+
+# Display IP Configuration
+printf 'IP Configuration:\n'
+ip a s eth0 | grep inet | awk '{print $2}'
+printf '\n'
+
+# Generate Self-Signed Certificate
+printf 'Generating Self-Signed Certificate...\n\n'
+exec /usr/local/searxng/generate_self-signed_cert.sh &
+sleep 10
+
+# Start nginx
+printf 'Starting Nginx:\n'
+nginx &>/dev/null
+netstat -tnl | grep -E '80|443' | awk '{print $4}'
+
+# Print Server Target
+printf "\nSend Search Queries to:\nhttps://%s/search\n" `ip a s eth0 | grep inet | awk '{print $2}' | cut -d'/' -f1`
+
+# SearXNG Monitor
+printf '\nStarting SearXNG Monitor...\n'
+exec /usr/local/searxng/searxng-monitor.sh &
+
+# Start uwsgi
+printf '\nStarting SearXNG...\n'
+printf 'Listening on %s\n' "${BIND_ADDRESS}"
+exec /usr/local/searxng/venv/bin/uwsgi --http-socket "$BIND_ADDRESS" "$UWSGI_SETTINGS_PATH" 2>/dev/null
