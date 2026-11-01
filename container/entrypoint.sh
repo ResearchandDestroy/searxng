@@ -82,12 +82,6 @@ setup() {
     local target_settings="$__SEARXNG_CONFIG_PATH/settings.yml"
 
     if [ ! -f "$target_settings" ]; then
-        cat <<EOF
-...
-... INFORMATION
-... "$target_settings" does not exist, creating from template...
-...
-EOF
         cp -pfT "$template_settings" "$target_settings"
 
         sed -i "s/ultrasecretkey/$(head -c 24 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9')/g" "$target_settings"
@@ -96,9 +90,7 @@ EOF
     check_file "$target_settings"
 }
 
-cat <<EOF
-SearXNG $__SEARXNG_VERSION
-EOF
+echo "DorXNG Server Codename: dorx-cannon v2"
 
 # Check for volume mounts
 volume_handler "$__SEARXNG_CONFIG_PATH"
@@ -123,4 +115,41 @@ case "${SEARXNG_PORT:-}" in
         ;;
 esac
 
-exec /usr/local/searxng/.venv/bin/granian searx.webapp:app
+# Start Tor
+printf '\nStarting Tor... Please Wait...\n'
+tor >/dev/null 2>&1
+
+# Check Tor
+printf '\nChecking Tor Connectivity...\n'
+tor_check=""
+for _ in $(seq 1 12); do
+    sleep 5
+    tor_check=$(curl -x socks5h://127.0.0.1:9050 -s -m 10 https://check.torproject.org/api/ip) && break
+done
+printf '%s\n\n' "${tor_check:-Tor connectivity check failed}"
+
+# Display IP Configuration
+printf 'IP Configuration:\n'
+ip a s eth0 | grep inet | awk '{print $2}'
+printf '\n'
+
+# Generate Self-Signed Certificate
+printf 'Generating Self-Signed Certificate...\n\n'
+/usr/local/searxng/generate_self-signed_cert.sh
+
+# Start nginx
+printf 'Starting Nginx:\n'
+nginx >/dev/null 2>&1
+netstat -tnl | grep -E ':(80|443) ' | awk '{print $4}'
+
+# Print Server Target
+printf "\nSend Search Queries to:\nhttps://%s/search\n" "$(ip a s eth0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)"
+
+# SearXNG Monitor
+printf '\nStarting SearXNG Monitor...\n'
+/usr/local/searxng/searxng-monitor.sh &
+
+# Start SearXNG
+printf '\nStarting SearXNG...\n'
+printf 'Listening on %s:%s\n' "$GRANIAN_HOST" "$GRANIAN_PORT"
+exec /usr/local/searxng/.venv/bin/granian searx.webapp:app 2>/dev/null

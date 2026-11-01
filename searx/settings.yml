@@ -2,7 +2,7 @@ general:
   # Debug mode, only for development. Is overwritten by ${SEARXNG_DEBUG}
   debug: false
   # displayed name
-  instance_name: "SearXNG"
+  instance_name: "DorXNG"
   # For example: https://example.com/privacy
   privacypolicy_url: false
   # use true to use your own donation page written in searx/info/en/donate.md
@@ -11,7 +11,7 @@ general:
   # mailto:contact@example.com
   contact_url: false
   # record stats
-  enable_metrics: true
+  enable_metrics: false
   # expose stats in open metrics format at /metrics
   # leave empty to disable (no password set)
   # open_metrics: <password>
@@ -63,27 +63,28 @@ search:
   #   - fr
   #   - fr-BE
   # ban time in seconds after engine errors
-  ban_time_on_fail: 5
+  ban_time_on_fail: 0
   # max ban time in seconds after engine errors
-  max_ban_time_on_fail: 120
+  max_ban_time_on_fail: 0
   suspended_times:
     # Engine suspension time after error (in seconds; set to 0 to disable)
     # For error "Access denied" and "HTTP error [402, 403]"
-    SearxEngineAccessDenied: 180
+    SearxEngineAccessDenied: 0
     # For error "CAPTCHA"
-    SearxEngineCaptcha: 3600
+    SearxEngineCaptcha: 0
     # For error "Too many request" and "HTTP error 429"
-    SearxEngineTooManyRequests: 180
+    SearxEngineTooManyRequests: 0
     # Cloudflare CAPTCHA
-    cf_SearxEngineCaptcha: 1296000
-    cf_SearxEngineAccessDenied: 86400
+    cf_SearxEngineCaptcha: 0
+    cf_SearxEngineAccessDenied: 0
     # ReCAPTCHA
-    recaptcha_SearxEngineCaptcha: 604800
+    recaptcha_SearxEngineCaptcha: 0
 
   # remove format to deny access, use lower case.
   # formats: [html, csv, json, rss]
   formats:
     - html
+    - json
 
 server:
   # Is overwritten by ${SEARXNG_PORT} and ${SEARXNG_BIND_ADDRESS}
@@ -175,14 +176,14 @@ preferences:
 #
 outgoing:
   # default timeout in seconds, can be override by engine
-  request_timeout: 3.0
+  request_timeout: 60.0
   # the maximum timeout in seconds
   # max_request_timeout: 10.0
   # suffix of searxng_useragent, could contain information like an email address
   # to the administrator
   useragent_suffix: ""
   # The maximum number of concurrent connections that may be established.
-  pool_connections: 100
+  pool_connections: 1000
   # Enables the use of HTTP2
   enable_http2: true
   # uncomment below section if you want to use a custom server certificate
@@ -197,6 +198,13 @@ outgoing:
   #      - http://proxy2:8080
   #
   #  using_tor_proxy: true
+  #
+  # DorXNG: route all upstream requests over the container's Tor SOCKS proxy
+  proxies:
+    all://:
+      - socks5h://127.0.0.1:9050
+  # DorXNG: enables the onion engines (ahmia, torch); startup fails if Tor is unreachable
+  using_tor_proxy: true
   #
   # Extra seconds to add in order to account for the time taken by the proxy
   #
@@ -244,7 +252,7 @@ plugins:
     active: false
 
   searx.plugins.tor_check.SXNGPlugin:
-    active: false
+    active: true
 
   searx.plugins.tracker_url_remover.SXNGPlugin:
     active: true
@@ -530,7 +538,6 @@ engines:
   - name: bing
     engine: bing
     shortcut: bi
-    disabled: true
     # base_url: https://cn.bing.com  # for instances hosted in China
 
   - name: bing images
@@ -1210,7 +1217,6 @@ engines:
   - name: google
     engine: google
     shortcut: go
-    disabled: true
 
   - name: google images
     engine: google_images
@@ -2074,7 +2080,6 @@ engines:
     engine: qwant
     shortcut: qw
     categories: [general, web]
-    disabled: true
 
   - name: qwant news
     qwant_categ: news
@@ -2360,7 +2365,6 @@ engines:
     shortcut: sp
     startpage_categ: web
     categories: [general, web]
-    inactive: true  # uses a Proof Of Work captcha https://github.com/searxng/searxng/pull/6669
 
   - name: startpage news
     engine: startpage
@@ -2494,6 +2498,10 @@ engines:
     categories: onions
     enable_http: true
     shortcut: tch
+    # DorXNG: Torch is slow over Tor (cold requests ~40-110s) and the first
+    # SOCKS connect to the onion sometimes fails fast, so allow time and retries
+    timeout: 110.0
+    retries: 2
 
   # TubeArchivist is a self-hosted Youtube archivist software.
   # https://docs.searxng.org/dev/engines/online/tubearchivist.html
@@ -2618,7 +2626,6 @@ engines:
   - name: yahoo
     engine: yahoo
     shortcut: yh
-    disabled: true
 
   - name: yahoo news
     engine: yahoo_news
@@ -2836,7 +2843,6 @@ engines:
   - name: seznam
     shortcut: szn
     engine: seznam
-    disabled: true
 
   - name: deepl
     engine: deepl
@@ -2852,7 +2858,6 @@ engines:
     engine: mojeek
     categories: [general, web]
     # uses a Proof of Work CAPTCHA that requires much computer power to solve
-    inactive: true
 
   - name: mojeek images
     shortcut: mjkimg
@@ -2888,7 +2893,6 @@ engines:
     categories: [general, web]
     engine: naver
     shortcut: nvr
-    disabled: true
 
   - name: naver images
     naver_category: images
