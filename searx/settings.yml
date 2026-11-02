@@ -205,6 +205,11 @@ outgoing:
       - socks5h://127.0.0.1:9050
   # DorXNG: enables the onion engines (ahmia, torch); startup fails if Tor is unreachable
   using_tor_proxy: true
+  # DorXNG: proxy-less network for the "<engine> direct" engines (DorXNG --no-tor)
+  networks:
+    direct:
+      proxies: null
+      using_tor_proxy: false
   #
   # Extra seconds to add in order to account for the time taken by the proxy
   #
@@ -302,8 +307,9 @@ engines:
   - name: 360search
     engine: 360search
     shortcut: 360so
-    timeout: 20.0
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    timeout: 20.0
 
   - name: 360search videos
     engine: 360search_videos
@@ -326,6 +332,7 @@ engines:
     paging: true
     search_url: https://startsiden.abcnyheter.no/sok/?q={query}&page={pageno}
     shortcut: abc
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     results_xpath: //ul[contains(@class, "results__list")]/li[contains(@class, "result")]
     url_xpath: ./a/@href
@@ -451,6 +458,8 @@ engines:
   - name: avalw
     engine: json_engine
     shortcut: av
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: general
     paging: true
     search_url: https://avalw.org/api/search?q={query}&page={pageno}&limit=10&tbm=all
@@ -459,7 +468,6 @@ engines:
     title_query: title
     content_query: snippet
     thumbnail: image_url
-    disabled: true
     inactive: true
     about:
       website: https://avalw.com
@@ -470,13 +478,14 @@ engines:
     engine: xpath
     categories: general
     shortcut: ayo
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     search_url: https://search.ayo.de/search?q={query}
     results_xpath: //div[contains(@class, 'search-result')]/div
     url_xpath: .//a/@href
     title_xpath: .//h3
     content_xpath: .//p
     suggestion_xpath: .//a[starts-with(@href, "https://search.ayo.de")]
-    disabled: true
     about:
       website: https://search.ayo.de
       use_official_api: false
@@ -507,6 +516,7 @@ engines:
     categories: [general]
     engine: baidu
     shortcut: bd
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: baidu images
@@ -526,6 +536,8 @@ engines:
   - name: wikipedia
     engine: wikipedia
     shortcut: wp
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     # add "list" to the array to get results in the results list
     display_type: ["infobox"]
     categories: [general]
@@ -538,6 +550,8 @@ engines:
   - name: bing
     engine: bing
     shortcut: bi
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     # base_url: https://cn.bing.com  # for instances hosted in China
 
   - name: bing images
@@ -582,11 +596,13 @@ engines:
   - name: boardreader
     engine: boardreader
     shortcut: boa
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: bpb
     engine: bpb
     shortcut: bpb
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: btdigg
@@ -641,6 +657,8 @@ engines:
   - name: cl0q
     engine: json_engine
     shortcut: cl
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: general
     paging: true
     first_page_num: 0
@@ -651,7 +669,6 @@ engines:
     url_prefix: https://
     title_query: title
     content_query: description
-    disabled: true
     inactive: true
     about:
       website: https://cl0q.com
@@ -691,6 +708,8 @@ engines:
   - name: crowdview
     engine: json_engine
     shortcut: cv
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: general
     paging: false
     search_url: https://crowdview-next-js.onrender.com/api/search-v3?query={query}
@@ -700,19 +719,21 @@ engines:
     content_query: snippet
     title_html_to_text: true
     content_html_to_text: true
-    disabled: true
     about:
       website: https://crowdview.ai/
 
   - name: yep
     engine: yep
     shortcut: yep
-    categories: general
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    categories: general
 
   - name: currency
     engine: currency_convert
     shortcut: cc
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
 
   - name: deezer
     engine: deezer
@@ -757,6 +778,8 @@ engines:
   - name: encyclosearch
     engine: json_engine
     shortcut: es
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: general
     paging: true
     search_url: https://encyclosearch.org/encyclosphere/search?q={query}&page={pageno}&resultsPerPage=15
@@ -764,7 +787,6 @@ engines:
     url_query: SourceURL
     title_query: Title
     content_query: Description
-    disabled: true
     about:
       website: https://encyclosearch.org
       official_api_documentation: https://encyclosearch.org/docs/#/rest-api
@@ -798,6 +820,8 @@ engines:
 
   - name: elasticsearch
     shortcut: els
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     engine: elasticsearch
     # base_url: http://localhost:9200
     # username: elastic
@@ -814,6 +838,8 @@ engines:
   - name: wikidata
     engine: wikidata
     shortcut: wd
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     timeout: 3.0
     weight: 2
     # add "list" to the array to get results in the results list
@@ -823,6 +849,8 @@ engines:
   - name: dogpile
     engine: dogpile
     shortcut: dog
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     dogpile_categ: search
     categories: general
     inactive: true
@@ -853,11 +881,14 @@ engines:
   - name: duckduckgo
     engine: duckduckgo
     shortcut: ddg
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
 
   - name: duckduckgo web
     engine: duckduckgo_web
     shortcut: ddgw
-    disabled: true
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
 
   - name: duckduckgo images
     engine: duckduckgo_extra
@@ -897,8 +928,9 @@ engines:
   - name: tineye
     engine: tineye
     shortcut: tin
-    timeout: 9.0
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    timeout: 9.0
 
   - name: etymonline
     engine: xpath
@@ -939,8 +971,9 @@ engines:
     content_xpath: ./div[contains(@class, 'snippet')]
     suggestion_xpath: //section[contains(@class, 'related-searches')]//a/span[1]
     shortcut: fa
-    categories: general
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    categories: general
     about:
       website: https://fastbot.de
       official_api_documentation:
@@ -956,6 +989,8 @@ engines:
   - name: findborg
     engine: findborg
     shortcut: fi
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     findborg_categ: search
     categories: general
     inactive: true
@@ -1018,9 +1053,10 @@ engines:
   - name: fireball
     engine: fireball
     shortcut: fire
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: general
     fireball_category: web
-    disabled: true
 
   - name: fireball news
     engine: fireball
@@ -1097,8 +1133,9 @@ engines:
     first_page_num: 0
     page_size: 10
     categories: general
-    disabled: true
     shortcut: fynd
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     about:
       website: https://fynd.bot
       use_official_api: false
@@ -1116,8 +1153,9 @@ engines:
     categories: general
     search_url: https://www.gabanza.com/search?query={query}
     shortcut: gab
-    timeout: 4
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    timeout: 4
     results_xpath: //div[contains(@class, "border-t")]/div/div
     url_xpath: (.//a/@href)[1]
     title_xpath: ./a
@@ -1206,7 +1244,8 @@ engines:
   - name: gmx
     engine: gmx
     shortcut: gmx
-    disabled: true
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
 
   - name: goodreads
     engine: goodreads
@@ -1217,6 +1256,8 @@ engines:
   - name: google
     engine: google
     shortcut: go
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
 
   - name: google images
     engine: google_images
@@ -1234,6 +1275,8 @@ engines:
   - name: google cse
     engine: google_cse
     shortcut: goc
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
 
   - name: google cse images
     engine: google_cse
@@ -1262,6 +1305,7 @@ engines:
   - name: grokipedia
     engine: grokipedia
     shortcut: gp
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -1335,8 +1379,9 @@ engines:
   - name: iseek
     engine: iseek
     shortcut: isk
-    timeout: 4
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    timeout: 4
     inactive: true
 
   - name: il post
@@ -1401,6 +1446,8 @@ engines:
   - name: jina
     engine: jina
     shortcut: ji
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     api_key: ""
     inactive: true
 
@@ -1438,12 +1485,13 @@ engines:
     categories: general
     paging: true
     shortcut: kav
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     search_url: https://kavunka.net/search/kavunka-srv.php
     method: POST
     request_body: request={query}&np={pageno}
     headers:
       Content-Type: application/x-www-form-urlencoded
-    disabled: true
     inactive: true
     results_xpath: //div[contains(@class, "issue")]
     url_xpath: .//h2/a/@href
@@ -1457,6 +1505,7 @@ engines:
   - name: keenable
     engine: keenable
     shortcut: keen
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -1497,6 +1546,7 @@ engines:
     categories: [general, blogs]
     search_url: https://kukei.eu/?q={query}
     shortcut: kuk
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
     results_xpath: //ul/li[contains(@class, "result-item-first-level")]
@@ -1565,11 +1615,15 @@ engines:
       - https://libretranslate.com/translate
     # api_key: ''
     shortcut: lt
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     inactive: true
 
   - name: littlelayer
     engine: json_engine
     shortcut: ll
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, blogs]
     paging: false
     search_url: https://litterlayer.com/load_results/?q={query}&page={pageno}
@@ -1579,7 +1633,6 @@ engines:
     url_query: url
     title_query: title
     content_query: description
-    disabled: true
     inactive: true
     about:
       website: https://littlelayer.com
@@ -1589,6 +1642,8 @@ engines:
   - name: lingva
     engine: lingva
     shortcut: lv
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     timeout: 6.0
     # set lingva instance in url, by default it will use the official instance
     # url: https://lingva.ml
@@ -1623,6 +1678,7 @@ engines:
     categories: general
     luxxle_categ: search
     shortcut: lux
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -1658,10 +1714,11 @@ engines:
   - name: marginalia
     engine: marginalia
     shortcut: mar
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     # To get an API key, please follow the instructions at
     # - https://about.marginalia-search.com/article/api/
     # api_key: ''
-    disabled: true
     inactive: true
 
   - name: mastodon users
@@ -1748,17 +1805,20 @@ engines:
     # mozhi_engine: google - see https://mozhi.aryak.me for supported engines
     timeout: 4.0
     shortcut: mz
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: mwmbl
     engine: mwmbl
     # api_url: https://api.mwmbl.org
     shortcut: mwm
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: neocities
     engine: neocities
     shortcut: nc
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -1863,8 +1923,9 @@ engines:
   - name: openlibrary
     engine: openlibrary
     shortcut: ol
-    timeout: 10
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    timeout: 10
 
   - name: openmeteo
     engine: open_meteo
@@ -2066,6 +2127,7 @@ engines:
     categories: [general]
     engine: quark
     shortcut: qk
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: quark images
@@ -2079,6 +2141,8 @@ engines:
     qwant_categ: web
     engine: qwant
     shortcut: qw
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, web]
 
   - name: qwant news
@@ -2134,6 +2198,8 @@ engines:
   - name: rawweb
     engine: json_engine
     shortcut: rw
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, blogs]
     paging: true
     search_url: 'https://api.rawweb.org/api/search?keyword={query}&page={pageno}&lang=*'
@@ -2143,7 +2209,6 @@ engines:
     content_query: content
     title_html_to_text: true
     content_html_to_text: true
-    disabled: true
     inactive: true
     about:
       website: https://rawweb.org
@@ -2183,6 +2248,8 @@ engines:
   - name: searchmysite
     engine: xpath
     shortcut: sms
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, blogs]
     paging: true
     search_url: https://searchmysite.net/search/?q={query}&page={pageno}
@@ -2190,7 +2257,6 @@ engines:
     url_xpath: .//a[contains(@class,'result-link')]/@href
     title_xpath: .//span[contains(@class,'result-title-txt')]/text()
     content_xpath: ./p[@id='result-hightlight']
-    disabled: true
     about:
       website: https://searchmysite.net
 
@@ -2199,6 +2265,7 @@ engines:
     categories: general
     searchrockit_categ: web
     shortcut: sr
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -2236,6 +2303,7 @@ engines:
   - name: sogou
     engine: sogou
     shortcut: sogou
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: sogou images
@@ -2306,6 +2374,7 @@ engines:
     privacywall_category: general
     paging: false  # only images and videos support pagination
     shortcut: pw
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: privacywall images
@@ -2325,9 +2394,10 @@ engines:
   - name: seekninja
     engine: seekninja
     shortcut: sen
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     # very slow due to its server-side events architecture
     timeout: 10
-    disabled: true
     inactive: true
 
   - name: semantic scholar
@@ -2363,6 +2433,8 @@ engines:
   - name: startpage
     engine: startpage
     shortcut: sp
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
     startpage_categ: web
     categories: [general, web]
 
@@ -2431,6 +2503,7 @@ engines:
     categories: general
     tiger_category: Websuche
     shortcut: tig
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -2534,9 +2607,10 @@ engines:
   - name: tusksearch
     engine: tusksearch
     shortcut: tu
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     tusk_categ: web
     categories: general
-    disabled: true
 
   - name: tusksearch images
     engine: tusksearch
@@ -2576,6 +2650,8 @@ engines:
   - name: unobtanium
     engine: xpath
     shortcut: uno
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, blogs]
     paging: true
     first_page_num: 0
@@ -2584,7 +2660,6 @@ engines:
     url_xpath: .//a/@href
     title_xpath: .//a/b
     content_xpath: .//p[2]
-    disabled: true
     inactive: true
     about:
       website: https://unobtanium.rocks
@@ -2596,6 +2671,7 @@ engines:
     categories: general
     search_type: web
     shortcut: yd
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: yandex images
@@ -2610,6 +2686,8 @@ engines:
     engine: yandex_api
     categories: [general, web]
     shortcut: yda
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     inactive: true
     # api_key: ""
     # folder_id: ""
@@ -2626,6 +2704,8 @@ engines:
   - name: yahoo
     engine: yahoo
     shortcut: yh
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
 
   - name: yahoo news
     engine: yahoo_news
@@ -2661,6 +2741,7 @@ engines:
     content_query: Snippet
     categories: [general, blogs]
     shortcut: wib
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     about:
       website: https://wiby.me/
@@ -2669,10 +2750,11 @@ engines:
     engine: mediawiki
     weight: 0.5
     shortcut: wb
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, wikimedia]
     base_url: "https://{language}.wikibooks.org/"
     search_type: text
-    disabled: true
     about:
       website: https://www.wikibooks.org/
       wikidata_id: Q367
@@ -2692,10 +2774,11 @@ engines:
     engine: mediawiki
     weight: 0.5
     shortcut: wq
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, wikimedia]
     base_url: "https://{language}.wikiquote.org/"
     search_type: text
-    disabled: true
     about:
       website: https://www.wikiquote.org/
       wikidata_id: Q369
@@ -2704,10 +2787,11 @@ engines:
     engine: mediawiki
     weight: 0.5
     shortcut: ws
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, wikimedia]
     base_url: "https://{language}.wikisource.org/"
     search_type: text
-    disabled: true
     about:
       website: https://www.wikisource.org/
       wikidata_id: Q263
@@ -2715,10 +2799,11 @@ engines:
   - name: wikispecies
     engine: mediawiki
     shortcut: wsp
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, science, wikimedia]
     base_url: "https://species.wikimedia.org/"
     search_type: text
-    disabled: true
     about:
       website: https://species.wikimedia.org/
       wikidata_id: Q13679
@@ -2737,10 +2822,11 @@ engines:
     engine: mediawiki
     weight: 0.5
     shortcut: wv
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, wikimedia]
     base_url: "https://{language}.wikiversity.org/"
     search_type: text
-    disabled: true
     about:
       website: https://www.wikiversity.org/
       wikidata_id: Q370
@@ -2749,10 +2835,11 @@ engines:
     engine: mediawiki
     weight: 0.5
     shortcut: wy
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: [general, wikimedia]
     base_url: "https://{language}.wikivoyage.org/"
     search_type: text
-    disabled: true
     about:
       website: https://www.wikivoyage.org/
       wikidata_id: Q373
@@ -2783,10 +2870,11 @@ engines:
 
   - name: wolframalpha
     shortcut: wa
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     engine: wolframalpha_noapi
     timeout: 6.0
     categories: general
-    disabled: true
 
   - name: wolframalpha_api
     # You can use the engine using the official stable API, but you need an API
@@ -2794,6 +2882,8 @@ engines:
     engine: wolframalpha_api
     # api_key: ''  # required!
     shortcut: waa
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     timeout: 6.0
     categories: general
     inactive: true
@@ -2801,10 +2891,14 @@ engines:
   - name: dictzone
     engine: dictzone
     shortcut: dc
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
 
   - name: mymemory translated
     engine: translated
     shortcut: tl
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     timeout: 5.0
     # You can use without an API key, but you are limited to 1000 words/day
     # See: https://mymemory.translated.net/doc/usagelimits.php
@@ -2842,11 +2936,15 @@ engines:
 
   - name: seznam
     shortcut: szn
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     engine: seznam
 
   - name: deepl
     engine: deepl
     shortcut: dpl
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     # You can use the engine using the official stable API, but you need an API key
     # See: https://www.deepl.com/pro-api?cta=header-pro-api
     # api_key: ''  # required!
@@ -2855,6 +2953,8 @@ engines:
 
   - name: mojeek
     shortcut: mjk
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     engine: mojeek
     categories: [general, web]
     # uses a Proof of Work CAPTCHA that requires much computer power to solve
@@ -2893,6 +2993,8 @@ engines:
     categories: [general, web]
     engine: naver
     shortcut: nvr
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
 
   - name: naver images
     naver_category: images
@@ -2918,6 +3020,7 @@ engines:
   - name: neosearch
     engine: neosearch
     shortcut: neo
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -2966,6 +3069,7 @@ engines:
     base_url:
       - https://yacy.searchlab.eu
     shortcut: ya
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     # if you aren't using HTTPS for your local yacy instance disable https
     # enable_http: false
@@ -3000,8 +3104,9 @@ engines:
     title_xpath: .//div[contains(@class, 'result-title')]/a
     content_xpath: .//div[contains(@class, 'result-excerpt')]
     shortcut: rel
-    categories: general
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    categories: general
     language: de
     about:
       website: https://reloado.com
@@ -3021,6 +3126,7 @@ engines:
     resulthunter_categ: web
     categories: general
     shortcut: reh
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: resulthunter images
@@ -3054,6 +3160,7 @@ engines:
     categories: general
     searchzee_categ: web
     shortcut: sz
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -3068,9 +3175,10 @@ engines:
   - name: startpagina
     engine: startpagina
     shortcut: spnl
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     startpagina_categ: web
     categories: general
-    disabled: true
     inactive: true
 
   - name: startpagina images
@@ -3103,8 +3211,8 @@ engines:
     swisscows_category: web
     results_per_page: 20
     shortcut: sw
-    disabled: true
-    inactive: true
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
 
   - name: swisscows images
     engine: swisscows
@@ -3172,6 +3280,7 @@ engines:
     categories: general
     vuhuv_category: general
     shortcut: vu
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
 
   - name: vuhuv images
@@ -3200,12 +3309,13 @@ engines:
   - name: wikimini
     engine: xpath
     shortcut: wkmn
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     search_url: https://fr.wikimini.org/w/index.php?search={query}&title=Sp%C3%A9cial%3ASearch&fulltext=Search
     url_xpath: //li/div[@class="mw-search-result-heading"]/a/@href
     title_xpath: //li//div[@class="mw-search-result-heading"]/a
     content_xpath: //li/div[@class="searchresult"]
     categories: general
-    disabled: true
     language: fr
     about:
       website: https://wikimini.org/
@@ -3224,6 +3334,7 @@ engines:
     search_url: https://xonaly.com/?query={query}
     categories: general
     shortcut: xo
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
     results_xpath: //div[contains(@class, 'results-block')]/ul/li
@@ -3238,6 +3349,7 @@ engines:
   - name: xprivo
     engine: xprivo
     shortcut: xpr
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
     inactive: true
 
@@ -3260,6 +3372,8 @@ engines:
   - name: zapmeta
     engine: xpath
     shortcut: zpm
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     categories: general
     search_url: https://www.zapmeta.com/search?q={query}&pg={pageno}
     results_xpath: //article[contains(@class, "organic-results-item")]
@@ -3268,7 +3382,6 @@ engines:
     content_xpath: ./p
     paging: true
     send_page_num_on_first_page: false  # otherwise blocks requests
-    disabled: true
     about:
       website: https://www.zapmeta.com/
       use_official_api: false
@@ -3277,6 +3390,8 @@ engines:
 
   - name: braveapi
     engine: braveapi
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     # read https://docs.searxng.org/dev/engines/online/brave.html
     api_key: ""
     inactive: true
@@ -3284,6 +3399,8 @@ engines:
   - name: brave
     engine: brave
     shortcut: br
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
     time_range_support: true
     paging: true
     categories: [general, web]
@@ -3324,6 +3441,8 @@ engines:
   - name: exaapi
     engine: exaapi
     shortcut: exa
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
+    disabled: true
     api_key: ""
     search_type: auto
     content_mode: highlights
@@ -3402,23 +3521,25 @@ engines:
   - name: metacrawler
     engine: s1search
     shortcut: mec
-    base_url: https://search.metacrawler.com
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    base_url: https://search.metacrawler.com
     inactive: true
 
   - name: zoo search
     engine: s1search
     shortcut: zoo
-    base_url: https://search.zoo.com
+    # DorXNG: disabled, ignores dork operators or unreachable (validated 2026-11-01)
     disabled: true
+    base_url: https://search.zoo.com
     inactive: true
 
   # s1search engines / mirrors with rampjs page layout
   - name: s1search
     engine: s1search_rampjs
     shortcut: s1
-    disabled: true
-    inactive: true
+    # DorXNG: honors dork operators over Tor (validated 2026-11-01)
+    disabled: false
 
 # Doku engine lets you access to any Doku wiki instance:
 # A public one or a privete/corporate one.
@@ -3497,6 +3618,53 @@ engines:
 #    delimiter:
 #        chars: ' '
 #        keys: ['line']
+
+  # DorXNG: direct (no Tor) copies of the validated engines, selected by
+  # DorXNG --no-tor through the "engines" request parameter. Disabled so the
+  # default (Tor) search never uses them. Validated 2026-11-01.
+
+  - name: brave direct
+    engine: brave
+    shortcut: brd
+    time_range_support: true
+    paging: true
+    categories: [general, web]
+    brave_category: search
+    network: direct
+    disabled: true
+
+  - name: duckduckgo web direct
+    engine: duckduckgo_web
+    shortcut: ddgwd
+    network: direct
+    disabled: true
+
+  - name: google cse direct
+    engine: google_cse
+    shortcut: gocd
+    network: direct
+    disabled: true
+
+  - name: s1search direct
+    engine: s1search_rampjs
+    shortcut: s1d
+    network: direct
+    disabled: true
+
+  - name: swisscows direct
+    engine: swisscows
+    categories: general
+    swisscows_category: web
+    results_per_page: 20
+    shortcut: swd
+    network: direct
+    disabled: true
+
+  - name: yahoo direct
+    engine: yahoo
+    shortcut: yhd
+    network: direct
+    disabled: true
 
 doi_resolvers:
   oadoi.org: 'https://oadoi.org/'
